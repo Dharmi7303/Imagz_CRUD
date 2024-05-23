@@ -1,0 +1,63 @@
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"
+    integrity="sha512-3gJwYpMe3QewGELv8k/BX9vcqhryRdzRMxVfq6ngyWXwo03GFEzjsUm8Q7RZcHPHksttq7/GFoxjCVUjkjvPdw=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.min.js"
+    integrity="sha512-3dZ9wIrMMij8rOH7X3kLfXAzwtcHpuYpEgQg1OA4QAob1e81H8ntUQmQm3pBudqIoySO5j0tHN4ENzA6+n2r4w=="
+    crossorigin="anonymous" referrerpolicy="no-referrer">
+    </script>
+<script src="https://cdn.datatables.net/v/bs5/dt-1.13.4/datatables.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $("table").DataTable({
+            order: [0, 'desc']
+        });
+    })
+    // Get references to the input field and table
+    const searchInput = document.getElementById('searchInput');
+    const dataTable = document.getElementById('dataTable');
+    const phoneInput = document.getElementById('phone');
+    const phoneError = document.getElementById('phone-error');
+
+    // Add an event listener to the input field for the 'input' event
+    searchInput.addEventListener('input', function () {
+        const searchTerm = searchInput.value.toLowerCase();
+        const rows = dataTable.getElementsByTagName('tr');
+
+        // Iterate through each row of the table
+        for (let i = 1; i < rows.length; i++) {
+            const rowData = rows[i].getElementsByTagName('td');
+            let foundMatch = false;
+
+            // Iterate through each cell in the current row
+            for (let j = 0; j < rowData.length; j++) {
+                const cellData = rowData[j].textContent.toLowerCase();
+
+                // Check if the cell data contains the search term
+                if (cellData.includes(searchTerm)) {
+                    foundMatch = true;
+                    break;
+                }
+            }
+
+            // Show/hide the row based on whether a match was found
+            rows[i].style.display = foundMatch ? '' : 'none';
+        }
+    });
+    phoneInput.addEventListener('input', function () {
+        const phoneNumber = this.value;
+        const validPhoneNumber = /^[6-9]\d{9}$/;
+
+        if (validPhoneNumber.test(phoneNumber)) {
+            phoneError.textContent = '';
+            phoneInput.setCustomValidity('');
+        } else {
+            phoneError.textContent = 'Please enter a valid phone number starting with 6, 7, 8, or 9';
+            phoneInput.setCustomValidity('Invalid phone number'); 
+        }
+    });
+</script>
+
+</body>
+
+</html>
